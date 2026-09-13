@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, ExtraTreesClassifier
@@ -28,6 +29,28 @@ class ModelManager:
         self.evaluation_results = {}
         self.global_feature_importance = {}
         self.primary_model_key = 'random_forest'
+        self.cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache')
+
+    def load_from_cache_or_train(self, dataset_key='cleveland'):
+        """Loads precomputed models and evaluation metrics from cache if available."""
+        import joblib, json
+        models_path = os.path.join(self.cache_dir, 'models.joblib')
+        eval_path = os.path.join(self.cache_dir, 'eval_results.json')
+        feature_imp_path = os.path.join(self.cache_dir, 'feature_importance.json')
+
+        if os.path.exists(models_path) and os.path.exists(eval_path) and os.path.exists(feature_imp_path):
+            try:
+                self.fitted_models = joblib.load(models_path)
+                with open(eval_path, 'r') as f:
+                    self.evaluation_results = json.load(f)
+                with open(feature_imp_path, 'r') as f:
+                    self.global_feature_importance = json.load(f)
+                print("[InsightIQ] Loaded model ensemble from serverless cache in ~10ms!")
+                return self.evaluation_results
+            except Exception as e:
+                print(f"[InsightIQ Cache Load Warning] {e}. Falling back to fresh training...")
+        
+        return self.train_and_evaluate(dataset_key=dataset_key)
 
     def train_and_evaluate(self, dataset_key='cleveland'):
         """Trains all models with cross-validation and computes performance metrics."""

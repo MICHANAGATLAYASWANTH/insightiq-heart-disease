@@ -1,0 +1,67 @@
+[
+  {
+    "feature": "thal",
+    "label": "Thallium Stress Test (3, 6, 7)",
+    "importance": 14.41
+  },
+  {
+    "feature": "cp",
+    "label": "Chest Pain Type (1-4)",
+    "importance": 13.51
+  },
+  {
+    "feature": "ca",
+    "label": "Major Vessels Colored by Fluoroscopy (0-3)",
+    "importance": 12.43
+  },
+  {
+    "feature": "thalach",
+    "label": "Max Heart Rate Achieved (bpm)",
+    "importance": 11.66
+  },
+  {
+    "feature": "oldpeak",
+    "label": "ST Depression (Exercise vs Rest)",
+    "importance": 10.5
+  },
+  {
+    "feature": "age",
+    "label": "Age (years)",
+    "importance": 8.12
+  },
+  {
+    "feature": "exang",
+    "label": "Exercise Induced Angina (1/0)",
+    "importance": 6.56
+  },
+  {
+    "feature": "chol",
+    "label": "Serum Cholesterol (mg/dl)",
+    "importance": 6.42
+  },
+  {
+    "feature": "trestbps",
+    "label": "Resting Blood Pressure (mm Hg)",
+    "importance": 5.8
+  },
+  {
+    "feature": "slope",
+    "label": "Slope of Peak ST Segment (1-3)",
+    "importance": 4.7
+  },
+  {
+    "feature": "sex",
+    "label": "Sex (1=Male, 0=Female)",
+    "importance": 3.32
+  },
+  {
+    "feature": "restecg",
+    "label": "Resting ECG Results (0-2)",
+    "importance": 1.71
+  },
+  {
+    "feature": "fbs",
+    "label": "Fasting Blood Sugar > 120 mg/dl (1/0)",
+    "importance": 0.87
+  }
+]

@@ -16,10 +16,11 @@ CORS(app)
 # Initialize ML subsystems
 print("[InsightIQ] Initializing Data Preprocessor...")
 preprocessor = DataPreprocessor()
+preprocessor.load_from_cache_or_prepare()
 
-print("[InsightIQ] Training Predictive Model Ensemble...")
+print("[InsightIQ] Initializing Predictive Model Ensemble...")
 model_manager = ModelManager(preprocessor)
-eval_results = model_manager.train_and_evaluate(dataset_key='cleveland')
+eval_results = model_manager.load_from_cache_or_train(dataset_key='cleveland')
 
 print("[InsightIQ] Initializing Decision Engine & Rulebook...")
 decision_engine = DecisionEngine(model_manager)

@@ -49,9 +49,24 @@ class DataPreprocessor:
         self.data_dir = data_dir or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.imputer = SimpleImputer(strategy='median')
         self.scaler = StandardScaler()
-        self.anomaly_detector = IsolationForest(contamination=0.04, random_state=42)
         self.feature_names = FEATURE_COLUMNS
         self.dataset_meta = {}
+
+    def load_from_cache_or_prepare(self):
+        """Loads fitted imputer and scaler from cache or prepares raw data."""
+        cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache', 'preprocessor.joblib')
+        if os.path.exists(cache_path):
+            try:
+                import joblib
+                cached = joblib.load(cache_path)
+                self.imputer = cached.imputer
+                self.scaler = cached.scaler
+                self.anomaly_detector = cached.anomaly_detector
+                self.dataset_meta = cached.dataset_meta
+                return
+            except Exception:
+                pass
+        self.prepare_data('cleveland')
 
     def load_raw_datasets(self):
         """Loads Cleveland (primary benchmark) and combined multi-center datasets."""
