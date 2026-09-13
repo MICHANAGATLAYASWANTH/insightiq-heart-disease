@@ -1,7 +1,7 @@
 # InsightIQ - Heart Disease Clinical Decision Support System
 
 > **Theme**: *"Turning data into intelligent decisions"*  
-> **Live Demo Link**: [https://ed19eed7810be6.lhr.life/](https://ed19eed7810be6.lhr.life/)  
+> **Live Demo Link**: [https://a7561af54e3556.lhr.life/](https://a7561af54e3556.lhr.life/)  
 > **Local Development Link**: [http://localhost:5050](http://localhost:5050)  
 > **Author**: [@MICHANAGATLAYASWANTH](https://github.com/MICHANAGATLAYASWANTH)
 
@@ -124,7 +124,7 @@ Evaluated across the multi-center dataset using **5-Fold Stratified Cross-Valida
 
 6. Open your browser and navigate to:
    - **Local Development Link**: [http://localhost:5050](http://localhost:5050)
-   - **Public Live Demo Link**: [https://ed19eed7810be6.lhr.life/](https://ed19eed7810be6.lhr.life/)
+   - **Public Live Demo Link**: [https://a7561af54e3556.lhr.life/](https://a7561af54e3556.lhr.life/)
 
 ---
 
