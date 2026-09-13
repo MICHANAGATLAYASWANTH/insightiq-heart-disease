@@ -7,7 +7,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![Flask](https://img.shields.io/badge/framework-Flask-black.svg)](https://flask.palletsprojects.com/)
 [![scikit-learn](https://img.shields.io/badge/ML-scikit--learn-orange.svg)](https://scikit-learn.org/)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMICHANAGATLAYASWANTH%2FInsightIQ-Heart-Disease-Decision-Support-System)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMICHANAGATLAYASWANTH%2Finsightiq-heart-disease)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -97,8 +97,8 @@ Evaluated across the multi-center dataset using **5-Fold Stratified Cross-Valida
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/MICHANAGATLAYASWANTH/InsightIQ-Heart-Disease-Decision-Support-System.git
-   cd InsightIQ-Heart-Disease-Decision-Support-System
+   git clone https://github.com/MICHANAGATLAYASWANTH/insightiq-heart-disease.git
+   cd insightiq-heart-disease
    ```
 
 2. **Create and activate a virtual environment**:
