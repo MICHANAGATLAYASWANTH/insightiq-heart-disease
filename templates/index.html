@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightIQ - Heart Disease Clinical Decision Support System</title>
+    <meta name="description" content="InsightIQ: Machine-learning-powered cardiovascular decision support system. Translates clinical patient biomarkers into calibrated risk scores, explainable drivers, and actionable AHA/ACC care pathways.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome / Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="dark-theme">
+    <!-- Background Ambient Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- App Container -->
+    <div class="app-layout">
+        <!-- Top Navigation Bar -->
+        <header class="top-nav" id="top-navbar">
+            <div class="nav-left">
+                <div class="brand-logo">
+                    <div class="logo-icon-wrap">
+                        <i class="fa-solid fa-brain-circuit"></i>
+                        <span class="pulse-ring"></span>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">Insight<span class="brand-highlight">IQ</span></span>
+                        <span class="brand-tagline">Turning Data Into Intelligent Decisions</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-center">
+                <div class="clinical-focus-badge">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <span>Cardiovascular Clinical Decision Engine</span>
+                    <span class="badge-mini-live">920 Patients &bull; 4 Centers</span>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <div class="system-status-badge" id="system-status">
+                    <span class="status-dot online"></span>
+                    <span class="status-label">Ensemble ML Engine: <strong>Active (83.2% Acc / 91.2% AUC)</strong></span>
+                </div>
+                <button id="theme-toggle" class="btn-icon" title="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Executive Summary Strip -->
+        <section class="kpi-strip" id="kpi-summary-strip">
+            <div class="kpi-card" id="kpi-records">
+                <div class="kpi-icon-box cyan"><i class="fa-solid fa-database"></i></div>
+                <div class="kpi-details">
+                    <span class="kpi-label">Ingested Data Records</span>
+                    <div class="kpi-value" id="kpi-total-records">920</div>
+                    <span class="kpi-subtext">Cleveland, Hungarian, Swiss, VA</span>
+                </div>
+            </div>
+
+            <div class="kpi-card" id="kpi-accuracy">
+                <div class="kpi-icon-box indigo"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="kpi-details">
+                    <span class="kpi-label">Predictive Power (ROC-AUC)</span>
+                    <div class="kpi-value" id="kpi-roc-auc">91.2%</div>
+                    <span class="kpi-subtext">5-Fold Stratified Ensemble CV</span>
+                </div>
+            </div>
+
+            <div class="kpi-card" id="kpi-high-risk">
+                <div class="kpi-icon-box amber"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="kpi-details">
+                    <span class="kpi-label">High-Risk Triage Flagged</span>
+                    <div class="kpi-value" id="kpi-alerts-count">408</div>
+                    <span class="kpi-subtext">Prioritized for Urgent Care</span>
+                </div>
+            </div>
+
+            <div class="kpi-card" id="kpi-anomalies">
+                <div class="kpi-icon-box rose"><i class="fa-solid fa-shield-virus"></i></div>
+                <div class="kpi-details">
+                    <span class="kpi-label">Detected Anomalies</span>
+                    <div class="kpi-value" id="kpi-anomalies-count">37</div>
+                    <span class="kpi-subtext">Isolation Forest Outliers</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Workspace Tabs Navigation -->
+        <nav class="tabs-nav" id="main-tabs-nav" role="tablist">
+            <button class="tab-btn active" id="tab-btn-simulator" data-tab="simulator-tab">
+                <i class="fa-solid fa-sliders"></i> Real-Time Decision Simulator
+            </button>
+            <button class="tab-btn" id="tab-btn-overview" data-tab="overview-tab">
+                <i class="fa-solid fa-chart-pie"></i> Population Analytics
+            </button>
+            <button class="tab-btn" id="tab-btn-batch" data-tab="batch-tab">
+                <i class="fa-solid fa-table-list"></i> Batch Records & Anomaly Audit
+            </button>
+            <button class="tab-btn" id="tab-btn-models" data-tab="models-tab">
+                <i class="fa-solid fa-microchip"></i> ML Model Observatory
+            </button>
+        </nav>
+
+        <!-- Tab Content Areas -->
+        <main class="tabs-content-wrapper">
+            
+            <!-- TAB 1: REAL-TIME DECISION SIMULATOR -->
+            <section class="tab-pane active" id="simulator-tab" role="tabpanel">
+                <div class="simulator-layout">
+                    <!-- Left: Clinical Input Form -->
+                    <div class="simulator-input-card glass-panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2><i class="fa-solid fa-user-doctor"></i> Patient Clinical Diagnostic Profile</h2>
+                                <p class="panel-subtitle">Enter biomarker parameters or pick a verified clinical persona for instant ML evaluation.</p>
+                            </div>
+                            <div class="persona-chips-wrapper">
+                                <span class="persona-label">Persona Presets:</span>
+                                <div class="persona-buttons" id="persona-buttons-container">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="prediction-form" class="clinical-form">
+                            <div class="form-grid">
+                                <!-- Age -->
+                                <div class="input-group">
+                                    <label for="input-age">Age (Years) <span class="badge-mini">Demographic</span></label>
+                                    <div class="input-with-stepper">
+                                        <input type="number" id="input-age" name="age" min="20" max="95" value="54" required>
+                                        <span class="unit">yrs</span>
+                                    </div>
+                                </div>
+
+                                <!-- Sex -->
+                                <div class="input-group">
+                                    <label for="input-sex">Biological Sex</label>
+                                    <select id="input-sex" name="sex">
+                                        <option value="1" selected>Male (1)</option>
+                                        <option value="0">Female (0)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Chest Pain Type (cp) -->
+                                <div class="input-group">
+                                    <label for="input-cp">Chest Pain Symptom (CP)</label>
+                                    <select id="input-cp" name="cp">
+                                        <option value="1">1: Typical Angina (Exertional)</option>
+                                        <option value="2">2: Atypical Angina</option>
+                                        <option value="3" selected>3: Non-Anginal Chest Pain</option>
+                                        <option value="4">4: Asymptomatic (Silent Ischemia)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Resting Blood Pressure (trestbps) -->
+                                <div class="input-group">
+                                    <label for="input-trestbps">Resting BP (Systolic)</label>
+                                    <div class="input-with-stepper">
+                                        <input type="number" id="input-trestbps" name="trestbps" min="80" max="220" value="130" required>
+                                        <span class="unit">mm Hg</span>
+                                    </div>
+                                </div>
+
+                                <!-- Serum Cholesterol (chol) -->
+                                <div class="input-group">
+                                    <label for="input-chol">Serum Cholesterol</label>
+                                    <div class="input-with-stepper">
+                                        <input type="number" id="input-chol" name="chol" min="100" max="600" value="240" required>
+                                        <span class="unit">mg/dL</span>
+                                    </div>
+                                </div>
+
+                                <!-- Fasting Blood Sugar (fbs) -->
+                                <div class="input-group">
+                                    <label for="input-fbs">Fasting Blood Sugar > 120</label>
+                                    <select id="input-fbs" name="fbs">
+                                        <option value="0" selected>False / Normal (≤ 120 mg/dL)</option>
+                                        <option value="1">True / Hyperglycemic (> 120 mg/dL)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Resting ECG (restecg) -->
+                                <div class="input-group">
+                                    <label for="input-restecg">Resting ECG Results</label>
+                                    <select id="input-restecg" name="restecg">
+                                        <option value="0" selected>0: Normal</option>
+                                        <option value="1">1: ST-T Wave Abnormality</option>
+                                        <option value="2">2: Left Ventricular Hypertrophy</option>
+                                    </select>
+                                </div>
+
+                                <!-- Max Heart Rate (thalach) -->
+                                <div class="input-group">
+                                    <label for="input-thalach">Max Heart Rate Achieved</label>
+                                    <div class="input-with-stepper">
+                                        <input type="number" id="input-thalach" name="thalach" min="60" max="220" value="150" required>
+                                        <span class="unit">bpm</span>
+                                    </div>
+                                </div>
+
+                                <!-- Exercise Induced Angina (exang) -->
+                                <div class="input-group">
+                                    <label for="input-exang">Exercise Induced Angina</label>
+                                    <select id="input-exang" name="exang">
+                                        <option value="0" selected>No (0)</option>
+                                        <option value="1">Yes (1)</option>
+                                    </select>
+                                </div>
+
+                                <!-- ST Depression (oldpeak) -->
+                                <div class="input-group">
+                                    <label for="input-oldpeak">ST Depression (Oldpeak)</label>
+                                    <div class="input-with-stepper">
+                                        <input type="number" id="input-oldpeak" name="oldpeak" min="0.0" max="7.0" step="0.1" value="0.8" required>
+                                        <span class="unit">mm</span>
+                                    </div>
+                                </div>
+
+                                <!-- Slope of Peak ST (slope) -->
+                                <div class="input-group">
+                                    <label for="input-slope">Peak Exercise ST Slope</label>
+                                    <select id="input-slope" name="slope">
+                                        <option value="1" selected>1: Upsloping (Benign)</option>
+                                        <option value="2">2: Flat (Ischemic Alert)</option>
+                                        <option value="3">3: Downsloping (Severe Ischemia)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Fluoroscopy Vessels (ca) -->
+                                <div class="input-group">
+                                    <label for="input-ca">Major Vessels Colored (CA)</label>
+                                    <select id="input-ca" name="ca">
+                                        <option value="0" selected>0 Vessels (Clear)</option>
+                                        <option value="1">1 Vessel Narrowed</option>
+                                        <option value="2">2 Vessels Narrowed</option>
+                                        <option value="3">3 Major Vessels Narrowed</option>
+                                    </select>
+                                </div>
+
+                                <!-- Thalassemia (thal) -->
+                                <div class="input-group">
+                                    <label for="input-thal">Thallium Scintigraphy Test</label>
+                                    <select id="input-thal" name="thal">
+                                        <option value="3" selected>3: Normal Perfusion</option>
+                                        <option value="6">6: Fixed Myocardial Defect</option>
+                                        <option value="7">7: Reversible Ischemic Defect</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary" id="btn-run-inference">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Run Intelligent Risk Analysis
+                                </button>
+                                <button type="button" class="btn-secondary" id="btn-reset-form">
+                                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset Defaults
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Decision Support Output & Prescriptions -->
+                    <div class="simulator-output-column">
+                        <!-- Risk Score & Triage Banner -->
+                        <div class="glass-panel output-summary-panel" id="risk-summary-card">
+                            <div class="panel-header-inline">
+                                <h3><i class="fa-solid fa-stethoscope"></i> Diagnostic Risk Assessment</h3>
+                                <span class="anomaly-tag" id="anomaly-badge" style="display: none;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Outlier Anomaly Flagged
+                                </span>
+                            </div>
+
+                            <div class="gauge-and-triage">
+                                <!-- Animated Circular Gauge -->
+                                <div class="gauge-container">
+                                    <svg class="radial-gauge-svg" viewBox="0 0 160 160" id="risk-gauge-svg">
+                                        <circle class="gauge-bg" cx="80" cy="80" r="66" />
+                                        <circle class="gauge-meter" id="gauge-meter-fill" cx="80" cy="80" r="66" />
+                                    </svg>
+                                    <div class="gauge-center-text">
+                                        <span class="gauge-score-value" id="res-risk-score">--</span>
+                                        <span class="gauge-percent-symbol">%</span>
+                                        <span class="gauge-label-text">Risk Score</span>
+                                    </div>
+                                </div>
+
+                                <!-- Triage Status Box -->
+                                <div class="triage-status-box">
+                                    <div class="tier-badge-large" id="res-risk-tier">Analyzing...</div>
+                                    <div class="triage-level-text" id="res-triage-level">Level 4: Routine Wellness</div>
+                                    <p class="triage-summary" id="res-triage-summary">
+                                        Awaiting input data to generate calibrated cardiovascular risk predictions.
+                                    </p>
+                                    <div class="model-consensus-tag">
+                                        <i class="fa-solid fa-shield-halved"></i> Ensemble Consensus: 
+                                        <strong id="res-agreement-pct">98%</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Model Ensemble Probability Comparison -->
+                            <div class="model-breakdown-strip" id="model-breakdown-strip">
+                                <div class="model-pill" title="Random Forest (Top Tree Ensemble)">
+                                    <span class="m-name">Random Forest</span>
+                                    <span class="m-val" id="m-val-rf">--%</span>
+                                </div>
+                                <div class="model-pill" title="Gradient Boosting (Sequential Boost)">
+                                    <span class="m-name">Gradient Boost</span>
+                                    <span class="m-val" id="m-val-gb">--%</span>
+                                </div>
+                                <div class="model-pill" title="Calibrated Logistic Regression">
+                                    <span class="m-name">Logistic Reg</span>
+                                    <span class="m-val" id="m-val-lr">--%</span>
+                                </div>
+                                <div class="model-pill" title="Extra Trees Classifier">
+                                    <span class="m-name">Extra Trees</span>
+                                    <span class="m-val" id="m-val-et">--%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Local Explainability: Factor Contribution Waterfall -->
+                        <div class="glass-panel explainability-panel">
+                            <div class="panel-header-inline">
+                                <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Biomarker Risk Drivers (Explainability)</h3>
+                                <span class="hint-text">Factors elevating vs protecting cardiovascular profile</span>
+                            </div>
+                            <div class="drivers-list" id="drivers-list-container">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Actionable Decision Prescriptions -->
+                        <div class="glass-panel recommendations-panel">
+                            <div class="panel-header-inline">
+                                <h3><i class="fa-solid fa-clipboard-check"></i> Actionable Clinical Decisions & Prescriptions</h3>
+                                <span class="badge-accent">Intelligent Decisions</span>
+                            </div>
+
+                            <div class="rec-sections-grid">
+                                <div class="rec-block" id="rec-clinical-actions">
+                                    <h4><i class="fa-solid fa-hospital-user"></i> Immediate Diagnostic Workup</h4>
+                                    <ul class="rec-list" id="list-clinical-actions"></ul>
+                                </div>
+
+                                <div class="rec-block" id="rec-pharmacotherapy">
+                                    <h4><i class="fa-solid fa-pills"></i> Pharmacotherapy & Monitoring</h4>
+                                    <ul class="rec-list" id="list-pharmacotherapy"></ul>
+                                </div>
+
+                                <div class="rec-block" id="rec-lifestyle">
+                                    <h4><i class="fa-solid fa-heart-circle-check"></i> Lifestyle Prescriptions</h4>
+                                    <ul class="rec-list" id="list-lifestyle"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WHAT-IF COUNTERFACTUAL INTERVENTION STUDIO -->
+                        <div class="glass-panel whatif-panel" id="whatif-intervention-studio">
+                            <div class="panel-header-inline">
+                                <div>
+                                    <h3><i class="fa-solid fa-wand-magic"></i> Interactive "What-If" Counterfactual Explorer</h3>
+                                    <p class="panel-subtitle">Simulate clinical interventions and observe dynamic risk score reductions.</p>
+                                </div>
+                                <div class="whatif-delta-badge" id="whatif-delta-tag">
+                                    <span id="whatif-delta-val">-0.0%</span> Risk Reduction
+                                </div>
+                            </div>
+
+                            <div class="whatif-sliders-grid">
+                                <!-- Slider 1: Blood Pressure Reduction -->
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <label for="whatif-bp">Simulate Blood Pressure Control:</label>
+                                        <span class="slider-val" id="val-whatif-bp">120 mm Hg</span>
+                                    </div>
+                                    <input type="range" id="whatif-bp" min="100" max="190" step="2" value="120">
+                                </div>
+
+                                <!-- Slider 2: Cholesterol Reduction -->
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <label for="whatif-chol">Simulate Statin / Lipid Reduction:</label>
+                                        <span class="slider-val" id="val-whatif-chol">180 mg/dL</span>
+                                    </div>
+                                    <input type="range" id="whatif-chol" min="130" max="320" step="5" value="180">
+                                </div>
+
+                                <!-- Slider 3: Exercise Angina Treatment -->
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <label for="whatif-exang">Revascularize / Relieve Angina:</label>
+                                        <span class="slider-val" id="val-whatif-exang">No Symptoms</span>
+                                    </div>
+                                    <input type="range" id="whatif-exang" min="0" max="1" step="1" value="0">
+                                </div>
+
+                                <!-- Slider 4: ST Depression Improvement -->
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <label for="whatif-oldpeak">Simulate Ischemia Normalization:</label>
+                                        <span class="slider-val" id="val-whatif-oldpeak">0.2 mm</span>
+                                    </div>
+                                    <input type="range" id="whatif-oldpeak" min="0.0" max="4.0" step="0.1" value="0.2">
+                                </div>
+                            </div>
+
+                            <div class="whatif-takeaway-box" id="whatif-takeaway">
+                                <i class="fa-solid fa-lightbulb"></i> Adjust the intervention sliders above to see how medical therapy and lifestyle changes alter the patient's predicted trajectory.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: POPULATION ANALYTICS & EDA -->
+            <section class="tab-pane" id="overview-tab" role="tabpanel">
+                <div class="analytics-grid">
+                    <div class="glass-panel chart-panel">
+                        <div class="panel-header-inline">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Population Risk Stratification</h3>
+                            <span class="hint-text">920 Patients across 4 Cohorts</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-risk-distribution"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel chart-panel">
+                        <div class="panel-header-inline">
+                            <h3><i class="fa-solid fa-hospital"></i> Multi-Center Cohort Sourcing</h3>
+                            <span class="hint-text">Cleveland, Hungarian, Swiss, VA</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-cohorts"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel chart-panel span-full">
+                        <div class="panel-header-inline">
+                            <h3><i class="fa-solid fa-layer-group"></i> Global Feature Importance Hierarchy</h3>
+                            <span class="hint-text">Derived from 120-Tree Random Forest Ensemble Gini Impurity</span>
+                        </div>
+                        <div class="chart-container-tall">
+                            <canvas id="chart-global-importance"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: BATCH RECORDS & ANOMALY AUDITING -->
+            <section class="tab-pane" id="batch-tab" role="tabpanel">
+                <div class="glass-panel batch-panel">
+                    <div class="batch-toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-input-wrap">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="batch-search-input" placeholder="Search Patient ID, Cohort, or Biomarker...">
+                            </div>
+                            <div class="filter-dropdown-wrap">
+                                <label for="filter-risk-tier"><i class="fa-solid fa-filter"></i> Risk Tier:</label>
+                                <select id="filter-risk-tier">
+                                    <option value="all">All Tiers</option>
+                                    <option value="Critical Risk">Critical Risk</option>
+                                    <option value="High Risk">High Risk</option>
+                                    <option value="Moderate Risk">Moderate Risk</option>
+                                    <option value="Low Risk">Low Risk</option>
+                                </select>
+                            </div>
+                            <div class="filter-dropdown-wrap">
+                                <label for="filter-cohort">Cohort:</label>
+                                <select id="filter-cohort">
+                                    <option value="all">All Medical Centers</option>
+                                    <option value="cleveland">Cleveland Clinic</option>
+                                    <option value="hungarian">Hungarian Institute</option>
+                                    <option value="switzerland">Switzerland Univ.</option>
+                                    <option value="va">Long Beach VA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="toolbar-right">
+                            <!-- CSV Upload Button -->
+                            <label class="btn-secondary file-upload-btn">
+                                <i class="fa-solid fa-file-arrow-up"></i> Upload Custom CSV
+                                <input type="file" id="batch-file-input" accept=".csv" style="display: none;">
+                            </label>
+                            <!-- Export CSV Button -->
+                            <button id="btn-export-batch" class="btn-secondary">
+                                <i class="fa-solid fa-file-export"></i> Export Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Batch Table -->
+                    <div class="table-responsive">
+                        <table class="modern-table" id="batch-records-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Center / Cohort</th>
+                                    <th>Age / Sex</th>
+                                    <th>Chest Pain</th>
+                                    <th>BP (mm Hg)</th>
+                                    <th>Chol (mg/dL)</th>
+                                    <th>Max HR</th>
+                                    <th>ST Depr</th>
+                                    <th>ML Risk Score</th>
+                                    <th>Risk Tier</th>
+                                    <th>Anomaly Flag</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batch-table-body">
+                                <tr>
+                                    <td colspan="12" class="text-center">Loading batch records...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: ML MODEL OBSERVATORY -->
+            <section class="tab-pane" id="models-tab" role="tabpanel">
+                <div class="models-observatory-grid">
+                    <!-- Head-to-Head Comparison Table -->
+                    <div class="glass-panel span-full">
+                        <div class="panel-header-inline">
+                            <h3><i class="fa-solid fa-trophy"></i> Multi-Model Benchmark & Cross-Validation Matrix</h3>
+                            <span class="badge-accent">5-Fold Stratified CV</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="modern-table benchmark-table" id="model-benchmark-table">
+                                <thead>
+                                    <tr>
+                                        <th>Model Architecture</th>
+                                        <th>Accuracy</th>
+                                        <th>Precision</th>
+                                        <th>Recall</th>
+                                        <th>F1-Score</th>
+                                        <th>ROC-AUC</th>
+                                        <th>True Neg (TN)</th>
+                                        <th>False Pos (FP)</th>
+                                        <th>False Neg (FN)</th>
+                                        <th>True Pos (TP)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="benchmark-table-body">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Interactive ROC Curves -->
+                    <div class="glass-panel chart-panel">
+                        <div class="panel-header-inline">
+                            <h3><i class="fa-solid fa-chart-area"></i> Receiver Operating Characteristic (ROC) Curves</h3>
+                            <span class="hint-text">True Positive vs False Positive Rate</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-roc-curves"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Confusion Matrix Heatmap -->
+                    <div class="glass-panel chart-panel">
+                        <div class="panel-header-inline">
+                            <h3><i class="fa-solid fa-border-all"></i> Primary Ensemble Confusion Matrix</h3>
+                            <span class="hint-text">Random Forest 5-Fold Validation</span>
+                        </div>
+                        <div class="confusion-matrix-wrapper" id="cm-display-wrapper">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-left">
+                <span>InsightIQ Decision Support System &bull; Version 2.4.0</span>
+            </div>
+            <div class="footer-center">
+                <span>Core Theme: "Turning data into intelligent decisions"</span>
+            </div>
+            <div class="footer-right">
+                <span>Dataset: UCI Heart Disease Repository (Cleveland, Hungarian, Swiss, VA)</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Patient Details Modal -->
+    <div class="modal-overlay" id="patient-modal" style="display: none;">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h3 id="modal-patient-id"><i class="fa-solid fa-user-tag"></i> Patient Profile</h3>
+                <button class="btn-icon" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modal-patient-content">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
