@@ -1,7 +1,7 @@
 # InsightIQ - Heart Disease Clinical Decision Support System
 
 > **Theme**: *"Turning data into intelligent decisions"*  
-> **Live Demo**: [https://1fcce8cb1328f6.lhr.life](https://1fcce8cb1328f6.lhr.life)  
+> **Official Vercel Deployment**: [https://insightiq-heart-disease.vercel.app](https://insightiq-heart-disease.vercel.app)  
 > **Author**: [@MICHANAGATLAYASWANTH](https://github.com/MICHANAGATLAYASWANTH)
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
