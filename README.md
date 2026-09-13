@@ -1,13 +1,13 @@
 # InsightIQ - Heart Disease Clinical Decision Support System
 
 > **Theme**: *"Turning data into intelligent decisions"*  
-> **Official Vercel Deployment**: [https://insightiq-heart-disease.vercel.app](https://insightiq-heart-disease.vercel.app)  
+> **Live Demo Link**: [https://ed19eed7810be6.lhr.life/](https://ed19eed7810be6.lhr.life/)  
+> **Local Development Link**: [http://localhost:5050](http://localhost:5050)  
 > **Author**: [@MICHANAGATLAYASWANTH](https://github.com/MICHANAGATLAYASWANTH)
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![Flask](https://img.shields.io/badge/framework-Flask-black.svg)](https://flask.palletsprojects.com/)
 [![scikit-learn](https://img.shields.io/badge/ML-scikit--learn-orange.svg)](https://scikit-learn.org/)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMICHANAGATLAYASWANTH%2Finsightiq-heart-disease)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -123,9 +123,8 @@ Evaluated across the multi-center dataset using **5-Fold Stratified Cross-Valida
    ```
 
 6. Open your browser and navigate to:
-   ```
-   http://localhost:5050
-   ```
+   - **Local Development Link**: [http://localhost:5050](http://localhost:5050)
+   - **Public Live Demo Link**: [https://ed19eed7810be6.lhr.life/](https://ed19eed7810be6.lhr.life/)
 
 ---
 
