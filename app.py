@@ -3,14 +3,17 @@ import io
 import json
 import pandas as pd
 import numpy as np
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 
 from engine.preprocessor import DataPreprocessor, FEATURE_COLUMNS, FEATURE_LABELS
 from engine.models import ModelManager
 from engine.decision_engine import DecisionEngine
 
-app = Flask(__name__, static_folder='static', template_folder='templates')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__,
+            static_folder=os.path.join(BASE_DIR, 'static'),
+            template_folder=os.path.join(BASE_DIR, 'templates'))
 CORS(app)
 
 # Initialize ML subsystems
@@ -69,6 +72,10 @@ print(f"[InsightIQ] Successfully loaded {len(batch_records)} multi-center record
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
 
 @app.route('/api/overview', methods=['GET'])
 def get_overview():
