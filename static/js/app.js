@@ -4,6 +4,11 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Dynamic API Base URL for GitHub Pages / Vercel cross-compatibility
+    const API_BASE = (window.location.hostname.includes('github.io') || window.location.protocol === 'file:')
+        ? 'https://insightiq-heart-disease.vercel.app'
+        : '';
+
     // Application State
     const state = {
         currentPatientInputs: {},
@@ -141,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     async function loadSamplePersonas() {
         try {
-            const res = await fetch('/api/sample-personas');
+            const res = await fetch(`${API_BASE}/api/sample-personas`);
             const data = await res.json();
             state.samplePersonas = data.personas || [];
             renderPersonaChips();
@@ -204,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.riskTierBadge.textContent = 'Evaluating ML Models...';
 
         try {
-            const res = await fetch('/api/predict', {
+            const res = await fetch(`${API_BASE}/api/predict`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(inputs)
@@ -370,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const res = await fetch('/api/simulate-whatif', {
+            const res = await fetch(`${API_BASE}/api/simulate-whatif`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -406,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     async function loadOverviewKPIs() {
         try {
-            const res = await fetch('/api/overview');
+            const res = await fetch(`${API_BASE}/api/overview`);
             const data = await res.json();
             if (!data.kpis) return;
 
@@ -490,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     async function loadModelObservatory() {
         try {
-            const res = await fetch('/api/models');
+            const res = await fetch(`${API_BASE}/api/models`);
             const data = await res.json();
             if (!data.models) return;
 
@@ -672,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     async function loadBatchData() {
         try {
-            const res = await fetch('/api/batch-data?limit=150');
+            const res = await fetch(`${API_BASE}/api/batch-data?limit=150`);
             const data = await res.json();
             state.batchRecords = data.records || [];
             renderBatchTable(state.batchRecords);
@@ -756,7 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('file', file);
 
             try {
-                const res = await fetch('/api/upload-csv', { method: 'POST', body: formData });
+                const res = await fetch(`${API_BASE}/api/upload-csv`, { method: 'POST', body: formData });
                 const json = await res.json();
                 if (json.success) {
                     alert(`Successfully ingested and scored ${json.count} records from ${file.name}!`);

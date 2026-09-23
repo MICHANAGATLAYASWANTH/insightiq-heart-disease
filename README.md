@@ -1,7 +1,9 @@
 # InsightIQ - Heart Disease Clinical Decision Support System
 
 > **Theme**: *"Turning data into intelligent decisions"*  
-> **Live Demo Link (Permanent Vercel)**: [https://insightiq-heart-disease.vercel.app/](https://insightiq-heart-disease.vercel.app/)  
+> **Permanent Live Demo (Vercel)**: [https://insightiq-heart-disease.vercel.app/](https://insightiq-heart-disease.vercel.app/)  
+> **Permanent GitHub Pages Demo**: [https://michanagatlayaswanth.github.io/insightiq-heart-disease/](https://michanagatlayaswanth.github.io/insightiq-heart-disease/)  
+> **Permanent Short Link**: [https://tinyurl.com/insightiq-live](https://tinyurl.com/insightiq-live)  
 > **Local Development Link**: [http://localhost:5050](http://localhost:5050)  
 > **Author**: [@MICHANAGATLAYASWANTH](https://github.com/MICHANAGATLAYASWANTH)
 
@@ -123,8 +125,10 @@ Evaluated across the multi-center dataset using **5-Fold Stratified Cross-Valida
    ```
 
 6. Open your browser and navigate to:
+   - **Live Production App (Vercel)**: [https://insightiq-heart-disease.vercel.app/](https://insightiq-heart-disease.vercel.app/)
+   - **Live Demo Site (GitHub Pages)**: [https://michanagatlayaswanth.github.io/insightiq-heart-disease/](https://michanagatlayaswanth.github.io/insightiq-heart-disease/)
+   - **Short Permanent Link**: [https://tinyurl.com/insightiq-live](https://tinyurl.com/insightiq-live)
    - **Local Development Link**: [http://localhost:5050](http://localhost:5050)
-   - **Public Live Demo Link**: [https://insightiq-heart-disease.vercel.app/](https://insightiq-heart-disease.vercel.app/)
 
 ---
 
